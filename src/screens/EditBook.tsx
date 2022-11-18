@@ -17,6 +17,7 @@ import { BookContext } from "../BookContext";
 import UploadImage from "../components/UploadImage";
 import useBookApi from "../hooks/useBookApi";
 import useCategoryApi from "../hooks/useCategoryApi";
+import useImageApi from "../hooks/useImageApi";
 import { Book, Category, Img } from "../interface";
 import { errorNotify, successNotify } from "../Notification";
 
@@ -26,10 +27,12 @@ const EditBook = () => {
   const [categories, setCategories] = useState<Array<Category>>([]);
   const [category, setCategory] = useState<string>("");
   const [bookInfo, setBookInfo] = useState<Book>();
-  const [imageUpload, setImageUpload] = useState<Img | null>(null);
+  const [imageBook, setImageBook] = useState<Img | null>(null);
+  const [fileUpload, setFileUpload] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
   const { getAllCategory } = useCategoryApi();
+  const { upload, destroy } = useImageApi();
   const { handleSubmit, control, reset } = useForm({
     defaultValues: {
       title: "",
@@ -49,7 +52,7 @@ const EditBook = () => {
         if (response.data != null) {
           const _book = response.data;
           setBookInfo(_book);
-          setImageUpload(_book?.image!);
+          setImageBook(_book?.image!);
           setCategory(_book?.category.id + "");
           reset({
             title: _book?.title,
@@ -59,7 +62,7 @@ const EditBook = () => {
             page: _book?.page,
           });
         } else {
-          errorNotify(response.message);
+          window.location.href = window.location.pathname + "/page-not-found";
         }
       })
       .catch((err) => errorNotify(err.message));
@@ -69,33 +72,23 @@ const EditBook = () => {
     if (params.id) {
       getBookInfo(Number(params.id));
     }
+    // eslint-disable-next-line
   }, [params.id]);
 
   useEffect(() => {
-    const getCategories = () => {
-      getAllCategory()
-        .then((response) => {
-          setCategories(response.data);
-        })
-        .catch((err) => {});
-    };
-
-    getCategories();
+    getAllCategory()
+      .then((response) => {
+        setCategories(response.data);
+      })
+      .catch((err) => {});
+    // eslint-disable-next-line
   }, []);
 
   const handleChangeSelect = (event: SelectChangeEvent) => {
     setCategory(event.target.value);
   };
 
-  const save = (data: any) => {
-    if (!imageUpload) {
-      errorNotify("Không có ảnh nào được tải lên!");
-      return;
-    }
-
-    data.categoryId = Number(category);
-
-    setLoading(true);
+  const updateBookInfo = (data: any) => {
     editBook(bookInfo?.id!, { ...data })
       .then((response) => {
         if (response.data !== null) {
@@ -112,6 +105,38 @@ const EditBook = () => {
         }, 1000);
         setIsReload(!isReload);
       });
+  };
+
+  const save = (data: any) => {
+    if (!imageBook && !fileUpload) {
+      errorNotify("Không có ảnh nào được tải lên!");
+      return;
+    }
+
+    data.categoryId = Number(category);
+
+    if (fileUpload) {
+      setLoading(true);
+      destroy(bookInfo?.image?.publicId!); // xoa anh cu di
+      // tai anh moi len
+      let formData = new FormData();
+      formData.append("file", fileUpload);
+      upload(formData, bookInfo?.id)
+        .then((response) => {
+          if (response.data !== null) {
+            updateBookInfo(data);
+          } else {
+            errorNotify(response.message);
+          }
+        })
+        .catch((err) => errorNotify(err.message))
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setLoading(true);
+      updateBookInfo(data);
+    }
   };
 
   return (
@@ -284,9 +309,10 @@ const EditBook = () => {
           <Grid item xs={6}>
             <UploadImage
               props={{
-                imageUpload: imageUpload,
-                setImageUpload: setImageUpload,
-                bookId: bookInfo?.id,
+                fileUpload: fileUpload,
+                setFileUpload: setFileUpload,
+                imageBook: imageBook,
+                setImageBook: setImageBook,
               }}
             />
           </Grid>

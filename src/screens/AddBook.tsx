@@ -17,18 +17,18 @@ import UploadImage from "../components/UploadImage";
 import useBookApi from "../hooks/useBookApi";
 import useCategoryApi from "../hooks/useCategoryApi";
 import useImageApi from "../hooks/useImageApi";
-import { Category, Img } from "../interface";
+import { Category } from "../interface";
 import { errorNotify, successNotify } from "../Notification";
 
-const EditBook = () => {
+const AddBook = () => {
   const { isReload, setIsReload } = useContext(BookContext);
 
   const [categories, setCategories] = useState<Array<Category>>([]);
   const [category, setCategory] = useState<string>("");
-  const [imageUpload, setImageUpload] = useState<Img | null>(null);
+  const [fileUpload, setFileUpload] = useState<File | null>(null);
 
   const { getAllCategory } = useCategoryApi();
-  const { destroyBookZero, updateBookId } = useImageApi();
+  const { upload } = useImageApi();
   const { addBook } = useBookApi();
 
   const navigate = useNavigate();
@@ -42,13 +42,7 @@ const EditBook = () => {
         setCategory(response.data[0].id + "");
       })
       .catch((err) => {});
-
-    // xoa cac anh co bookId 0
-    destroyBookZero()
-      .then((response) => {
-        console.log(response.message);
-      })
-      .catch((err) => {});
+    // eslint-disable-next-line
   }, []);
 
   const handleChangeSelect = (event: SelectChangeEvent) => {
@@ -56,7 +50,7 @@ const EditBook = () => {
   };
 
   const save = (data: any) => {
-    if (!imageUpload) {
+    if (!fileUpload) {
       errorNotify("Không có ảnh nào được tải lên!");
       return;
     }
@@ -68,9 +62,12 @@ const EditBook = () => {
         if (response.data === null) {
           errorNotify(response.message);
         } else {
-          updateBookId(response.data.id, imageUpload.id)
-            .then((response) => {})
-            .catch((err) => {});
+          let formData = new FormData();
+          formData.append("file", fileUpload);
+
+          upload(formData, response.data.id).catch((err) =>
+            errorNotify(err.message)
+          );
 
           successNotify(response.message);
         }
@@ -247,8 +244,8 @@ const EditBook = () => {
           <Grid item xs={6}>
             <UploadImage
               props={{
-                imageUpload: imageUpload,
-                setImageUpload: setImageUpload,
+                fileUpload: fileUpload,
+                setFileUpload: setFileUpload,
               }}
             />
           </Grid>
@@ -270,4 +267,4 @@ const EditBook = () => {
   );
 };
 
-export default EditBook;
+export default AddBook;

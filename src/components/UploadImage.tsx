@@ -1,21 +1,17 @@
-import React, { useState } from "react";
-import { Img } from "../interface";
+import React from "react";
 import "../App.css";
-import useImageApi from "../hooks/useImageApi";
-import { errorNotify, successNotify } from "../Notification";
-import { Box, LinearProgress } from "@mui/material";
+import { errorNotify } from "../Notification";
+import { Box } from "@mui/material";
+import { Img } from "../interface";
 
 interface Props {
-  imageUpload: Img | null;
-  setImageUpload: Function;
-  bookId?: number;
+  fileUpload: File | null;
+  setFileUpload: Function;
+  imageBook?: Img | null;
+  setImageBook?: Function;
 }
 
 const UploadImage = ({ props }: { props: Props }) => {
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const { upload, destroy } = useImageApi();
-
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     const target = event.currentTarget as HTMLInputElement;
@@ -37,41 +33,17 @@ const UploadImage = ({ props }: { props: Props }) => {
       return;
     }
 
-    let formData = new FormData();
-    formData.append("file", file);
+    props.setFileUpload(file);
     event.target.value = "";
-
-    setLoading(true);
-    upload(formData, props.bookId ? props.bookId : 0)
-      .then((response) => {
-        if (response.data !== null) {
-          props.setImageUpload(response.data);
-          successNotify(response.message);
-        } else {
-          errorNotify(response.message);
-        }
-      })
-      .catch((err) => errorNotify(err.message))
-      .finally(() => {
-        setLoading(false);
-      });
   };
 
   const handleDestroy = () => {
-    setLoading(true);
-    destroy(props.imageUpload?.publicId!)
-      .then((response) => {
-        successNotify(response.message);
-      })
-      .catch((err) => errorNotify(err.message))
-      .finally(() => {
-        props.setImageUpload(null);
-        setLoading(false);
-      });
+    props.setFileUpload(null);
+    props.setImageBook && props.setImageBook(null);
   };
 
   const styleUpload = {
-    display: props.imageUpload?.url ? "block" : "none",
+    display: props.fileUpload || props.imageBook ? "block" : "none",
   };
 
   return (
@@ -79,14 +51,18 @@ const UploadImage = ({ props }: { props: Props }) => {
       <div className="upload">
         <input type="file" id="file_up" name="file" onChange={handleUpload} />
         <div id="file_img" style={styleUpload}>
-          <img src={props.imageUpload?.url} alt="" />
+          <img
+            src={
+              props.imageBook
+                ? props.imageBook.url
+                : URL.createObjectURL(
+                    props.fileUpload ? props.fileUpload : new Blob()
+                  )
+            }
+            alt=""
+          />
           <div onClick={handleDestroy}>X</div>
         </div>
-        {loading && (
-          <Box sx={{ width: "100%" }}>
-            <LinearProgress />
-          </Box>
-        )}
       </div>
     </Box>
   );

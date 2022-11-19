@@ -6,6 +6,7 @@ import EditBook from "./screens/EditBook";
 import ListBooks from "./screens/ListBooks";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
+import ViewBook from "./screens/ViewBook";
 
 const Page = () => {
   return (
@@ -15,6 +16,7 @@ const Page = () => {
       <Route path="/register" element={<Register />} />
       <Route path="/add" element={<AddBook />} />
       <Route path="/edit/:id" element={<EditBook />} />
+      <Route path="/view/:id" element={<ViewBook />} />
       <Route path="/*" element={<NotFound />} />
     </Routes>
   );

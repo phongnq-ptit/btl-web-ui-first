@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  CircularProgress,
   FormControl,
   Grid,
   InputLabel,
@@ -10,29 +9,23 @@ import {
   SelectChangeEvent,
   TextField,
 } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
-import { BookContext } from "../BookContext";
+import { Link, useParams } from "react-router-dom";
 import UploadImage from "../components/UploadImage";
 import useBookApi from "../hooks/useBookApi";
 import useCategoryApi from "../hooks/useCategoryApi";
-import useImageApi from "../hooks/useImageApi";
 import { Book, Category, Img } from "../interface";
-import { errorNotify, successNotify } from "../Notification";
+import { errorNotify } from "../Notification";
 
-const EditBook = () => {
-  const { isReload, setIsReload } = useContext(BookContext);
-
+const ViewBook = () => {
   const [categories, setCategories] = useState<Array<Category>>([]);
   const [category, setCategory] = useState<string>("");
   const [bookInfo, setBookInfo] = useState<Book>();
   const [imageBook, setImageBook] = useState<Img | null>(null);
   const [fileUpload, setFileUpload] = useState<File | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
 
   const { getAllCategory } = useCategoryApi();
-  const { upload, destroy } = useImageApi();
   const { handleSubmit, control, reset } = useForm({
     defaultValues: {
       title: "",
@@ -44,7 +37,7 @@ const EditBook = () => {
   });
   const params = useParams();
 
-  const { getBook, editBook } = useBookApi();
+  const { getBook } = useBookApi();
 
   const getBookInfo = (id: number) => {
     getBook(id)
@@ -88,55 +81,8 @@ const EditBook = () => {
     setCategory(event.target.value);
   };
 
-  const updateBookInfo = (data: any) => {
-    editBook(bookInfo?.id!, { ...data })
-      .then((response) => {
-        if (response.data !== null) {
-          successNotify(response.message);
-          setBookInfo(response.data);
-        } else {
-          errorNotify(response.message);
-        }
-      })
-      .catch((err) => errorNotify(err.message))
-      .finally(() => {
-        setTimeout(() => {
-          setLoading(false);
-        }, 1000);
-        setIsReload(!isReload);
-      });
-  };
-
   const save = (data: any) => {
-    if (!imageBook && !fileUpload) {
-      errorNotify("Không có ảnh nào được tải lên!");
-      return;
-    }
-
-    data.categoryId = Number(category);
-
-    if (fileUpload) {
-      setLoading(true);
-      destroy(bookInfo?.image?.publicId!); // xoa anh cu di
-      // tai anh moi len
-      let formData = new FormData();
-      formData.append("file", fileUpload);
-      upload(formData, bookInfo?.id)
-        .then((response) => {
-          if (response.data !== null) {
-            updateBookInfo(data);
-          } else {
-            errorNotify(response.message);
-          }
-        })
-        .catch((err) => errorNotify(err.message))
-        .finally(() => {
-          setLoading(false);
-        });
-    } else {
-      setLoading(true);
-      updateBookInfo(data);
-    }
+    // nothing
   };
 
   return (
@@ -156,6 +102,7 @@ const EditBook = () => {
                   }) => (
                     <TextField
                       required
+                      disabled
                       margin="normal"
                       label="Tiêu đề"
                       variant="outlined"
@@ -182,6 +129,7 @@ const EditBook = () => {
                   }) => (
                     <TextField
                       required
+                      disabled
                       margin="normal"
                       label="Tác giả"
                       variant="outlined"
@@ -207,6 +155,7 @@ const EditBook = () => {
                     fieldState: { error },
                   }) => (
                     <TextField
+                      disabled
                       margin="normal"
                       label="Mô tả"
                       multiline
@@ -219,6 +168,9 @@ const EditBook = () => {
                       fullWidth
                     />
                   )}
+                  rules={{
+                    required: "Không được để trống!",
+                  }}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -232,6 +184,7 @@ const EditBook = () => {
                   }) => (
                     <TextField
                       required
+                      disabled
                       margin="normal"
                       label="Ngày xuất bản"
                       variant="outlined"
@@ -263,6 +216,7 @@ const EditBook = () => {
                     fieldState: { error },
                   }) => (
                     <TextField
+                      disabled
                       type="number"
                       margin="normal"
                       label="Số trang"
@@ -274,6 +228,9 @@ const EditBook = () => {
                       fullWidth
                     />
                   )}
+                  rules={{
+                    required: "Không được để trống!",
+                  }}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -282,6 +239,7 @@ const EditBook = () => {
                     Thể loại
                   </InputLabel>
                   <Select
+                    disabled
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={category + ""}
@@ -305,6 +263,7 @@ const EditBook = () => {
                 setFileUpload: setFileUpload,
                 imageBook: imageBook,
                 setImageBook: setImageBook,
+                notShowDelete: true,
               }}
             />
           </Grid>
@@ -316,17 +275,14 @@ const EditBook = () => {
           alignItems="center"
         >
           <Grid item>
-            <Button
-              type="submit"
-              variant="contained"
-              color="info"
-              disabled={loading}
-              startIcon={
-                loading && <CircularProgress size={20} color="inherit" />
-              }
+            <Link
+              style={{ color: "white", textDecoration: "none" }}
+              to={`/edit/${bookInfo?.id}`}
             >
-              Cập nhật
-            </Button>
+              <Button sx={{ mr: 1 }} variant="contained">
+                Sửa
+              </Button>
+            </Link>
           </Grid>
         </Grid>
       </Box>
@@ -334,4 +290,4 @@ const EditBook = () => {
   );
 };
 
-export default EditBook;
+export default ViewBook;

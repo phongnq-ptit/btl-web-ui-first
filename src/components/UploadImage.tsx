@@ -9,6 +9,7 @@ interface Props {
   setFileUpload: Function;
   imageBook?: Img | null;
   setImageBook?: Function;
+  notShowDelete?: boolean;
 }
 
 const UploadImage = ({ props }: { props: Props }) => {
@@ -61,7 +62,7 @@ const UploadImage = ({ props }: { props: Props }) => {
             }
             alt=""
           />
-          <div onClick={handleDestroy}>X</div>
+          {props.notShowDelete ? null : <div onClick={handleDestroy}>X</div>}
         </div>
       </div>
     </Box>

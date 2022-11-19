@@ -69,13 +69,13 @@ const BookItem = ({ book, index }: { book: Book; index: number }) => {
           <Grid item xs={2}>
             <Link
               style={{ color: "white", textDecoration: "none" }}
-              to={`/edit/${book.id}`}
+              to={`/view/${book.id}`}
             >
               <Button
-                sx={{ mr: 1, backgroundColor: "darkblue" }}
+                sx={{ mr: 1, backgroundColor: "darkgreen" }}
                 variant="contained"
               >
-                Sửa
+                Xem
               </Button>
             </Link>
             <Button

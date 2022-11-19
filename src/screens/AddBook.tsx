@@ -153,7 +153,6 @@ const AddBook = () => {
                     fieldState: { error },
                   }) => (
                     <TextField
-                      required
                       margin="normal"
                       label="Mô tả"
                       multiline
@@ -166,9 +165,6 @@ const AddBook = () => {
                       fullWidth
                     />
                   )}
-                  rules={{
-                    required: "Không được để trống!",
-                  }}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -211,7 +207,6 @@ const AddBook = () => {
                     fieldState: { error },
                   }) => (
                     <TextField
-                      required
                       type="number"
                       margin="normal"
                       label="Số trang"
@@ -223,9 +218,6 @@ const AddBook = () => {
                       fullWidth
                     />
                   )}
-                  rules={{
-                    required: "Không được để trống!",
-                  }}
                 />
               </Grid>
               <Grid item xs={6}>

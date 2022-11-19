@@ -30,6 +30,7 @@ const AddBook = () => {
   const { getAllCategory } = useCategoryApi();
   const { upload } = useImageApi();
   const { addBook } = useBookApi();
+  const { books } = useContext(BookContext);
 
   const navigate = useNavigate();
   const { handleSubmit, control } = useForm();
@@ -52,6 +53,14 @@ const AddBook = () => {
   const save = (data: any) => {
     if (!fileUpload) {
       errorNotify("Không có ảnh nào được tải lên!");
+      return;
+    }
+
+    const checkTitle = books.filter(
+      (item) => item.title.toLowerCase() === data.title.toLowerCase()
+    );
+    if (checkTitle) {
+      errorNotify(`Tiêu đề "${data.title}" đã tồn tại!`);
       return;
     }
 

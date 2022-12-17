@@ -230,7 +230,7 @@ const AddBook = () => {
               </Grid>
               <Grid item xs={6}>
                 <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">
+                  <InputLabel sx={{ mt: 2 }} id="demo-simple-select-label">
                     Thể loại
                   </InputLabel>
                   <Select
@@ -239,6 +239,7 @@ const AddBook = () => {
                     label="Thể loại"
                     value={category}
                     onChange={handleChangeSelect}
+                    sx={{ mt: 2 }}
                   >
                     {categories.map((item) => (
                       <MenuItem key={item.id + ""} value={item.id}>
@@ -247,6 +248,32 @@ const AddBook = () => {
                     ))}
                   </Select>
                 </FormControl>
+              </Grid>
+              <Grid item xs={6}>
+                <Controller
+                  name="price"
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      required
+                      type="number"
+                      margin="normal"
+                      label="Giá tiền"
+                      variant="outlined"
+                      value={value}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      fullWidth
+                    />
+                  )}
+                  rules={{
+                    required: "Không được để trống!",
+                  }}
+                />
               </Grid>
             </Grid>
           </Grid>

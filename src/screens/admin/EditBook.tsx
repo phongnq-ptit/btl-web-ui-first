@@ -41,6 +41,7 @@ const EditBook = () => {
       description: "",
       date: "",
       page: 0,
+      price: 0,
     },
   });
   const params = useParams();
@@ -61,6 +62,7 @@ const EditBook = () => {
             description: _book?.description,
             date: _book?.date,
             page: _book?.page,
+            price: _book?.price,
           });
         } else {
           window.location.href = window.location.pathname + "/page-not-found";
@@ -298,7 +300,7 @@ const EditBook = () => {
               </Grid>
               <Grid item xs={6}>
                 <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">
+                  <InputLabel sx={{ mt: 2 }} id="demo-simple-select-label">
                     Thể loại
                   </InputLabel>
                   <Select
@@ -307,6 +309,7 @@ const EditBook = () => {
                     value={category + ""}
                     label="Thể loại"
                     onChange={handleChangeSelect}
+                    sx={{ mt: 2 }}
                   >
                     {categories.map((item) => (
                       <MenuItem key={item.id + ""} value={item.id}>
@@ -315,6 +318,33 @@ const EditBook = () => {
                     ))}
                   </Select>
                 </FormControl>
+              </Grid>
+              <Grid item xs={6}>
+                <Controller
+                  name="price"
+                  defaultValue={bookInfo?.price}
+                  control={control}
+                  render={({
+                    field: { onChange, value },
+                    fieldState: { error },
+                  }) => (
+                    <TextField
+                      required
+                      type="number"
+                      margin="normal"
+                      label="Giá tiền"
+                      variant="outlined"
+                      value={value}
+                      onChange={onChange}
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      fullWidth
+                    />
+                  )}
+                  rules={{
+                    required: "Không được để trống!",
+                  }}
+                />
               </Grid>
             </Grid>
           </Grid>

@@ -33,7 +33,8 @@ const Login = () => {
           setLoading(true);
           setTimeout(() => {
             setLoading(false);
-            window.location.href = "/";
+            window.location.href =
+              response.data.data.role === "CLIENT" ? "/" : "/admin";
           }, 3000);
         } else {
           errorNotify(response.data.message);

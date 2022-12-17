@@ -57,7 +57,7 @@ const Header = () => {
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
             <Link
-              to="/"
+              to={!user || user.role !== "ADMIN" ? "/" : "/admin"}
               style={{
                 color: "white",
                 textDecoration: "none",

@@ -18,10 +18,22 @@ const Page = () => {
       <Route path="/register" element={<Register />} />
 
       {/* ADMIN SCREEN */}
-      <Route path="/admin" element={<ListBooks />} />
-      <Route path="/admin/add" element={<AddBook />} />
-      <Route path="/admin/edit/:id" element={<EditBook />} />
-      <Route path="/admin/view/:id" element={<ViewBook />} />
+      <Route
+        path="/admin"
+        element={!user || user.role !== "ADMIN" ? <Login /> : <ListBooks />}
+      />
+      <Route
+        path="/admin/add"
+        element={!user || user.role !== "ADMIN" ? <Login /> : <AddBook />}
+      />
+      <Route
+        path="/admin/edit/:id"
+        element={!user || user.role !== "ADMIN" ? <Login /> : <EditBook />}
+      />
+      <Route
+        path="/admin/view/:id"
+        element={!user || user.role !== "ADMIN" ? <Login /> : <ViewBook />}
+      />
 
       <Route path="/*" element={<NotFound />} />
     </Routes>

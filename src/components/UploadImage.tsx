@@ -50,7 +50,13 @@ const UploadImage = ({ props }: { props: Props }) => {
   return (
     <Box display="flex" justifyContent="center" alignItems="center">
       <div className="upload">
-        <input type="file" id="file_up" name="file" onChange={handleUpload} />
+        <input
+          type="file"
+          id="file_up"
+          name="file"
+          accept="image/*"
+          onChange={handleUpload}
+        />
         <div id="file_img" style={styleUpload}>
           <img
             src={

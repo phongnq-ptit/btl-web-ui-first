@@ -31,6 +31,7 @@ const EditBook = () => {
   const [fileUpload, setFileUpload] = useState<File | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const { books } = useContext(BookContext);
   const { getAllCategory } = useCategoryApi();
   const { upload, destroy } = useImageApi();
   const { handleSubmit, control, reset } = useForm({
@@ -114,6 +115,17 @@ const EditBook = () => {
     }
 
     data.categoryId = Number(category);
+
+    const checkTitle = books.filter((item) => {
+      return (
+        item.title.toLowerCase() === data.title.toLowerCase() &&
+        item.title.toLowerCase() !== bookInfo?.title.toLowerCase()
+      );
+    });
+    if (checkTitle.length > 0) {
+      errorNotify(`Tiêu đề "${data.title}" đã tồn tại!`);
+      return;
+    }
 
     if (fileUpload) {
       setLoading(true);
@@ -207,6 +219,7 @@ const EditBook = () => {
                     fieldState: { error },
                   }) => (
                     <TextField
+                      required
                       margin="normal"
                       label="Mô tả"
                       multiline
@@ -219,6 +232,9 @@ const EditBook = () => {
                       fullWidth
                     />
                   )}
+                  rules={{
+                    required: "Không được để trống!",
+                  }}
                 />
               </Grid>
               <Grid item xs={6}>
@@ -263,6 +279,7 @@ const EditBook = () => {
                     fieldState: { error },
                   }) => (
                     <TextField
+                      required
                       type="number"
                       margin="normal"
                       label="Số trang"
@@ -274,6 +291,9 @@ const EditBook = () => {
                       fullWidth
                     />
                   )}
+                  rules={{
+                    required: "Không được để trống!",
+                  }}
                 />
               </Grid>
               <Grid item xs={6}>

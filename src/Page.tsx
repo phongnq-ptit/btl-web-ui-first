@@ -2,24 +2,27 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import NotFound from "./components/NotFound";
 import { User } from "./interface";
-import AddBook from "./screens/AddBook";
-import EditBook from "./screens/EditBook";
-import ListBooks from "./screens/ListBooks";
-import Login from "./screens/Login";
-import Register from "./screens/Register";
-import ViewBook from "./screens/ViewBook";
+import Register from "./screens/common/Register";
+import ViewBook from "./screens/admin/ViewBook";
+import ListBooks from "./screens/admin/ListBooks";
+import AddBook from "./screens/admin/AddBook";
+import EditBook from "./screens/admin/EditBook";
+import Login from "./screens/common/Login";
 
 const Page = () => {
   const user: User = JSON.parse(localStorage.getItem("login")!);
 
   return (
     <Routes>
-      <Route path="/" element={<ListBooks />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/add" element={user ? <AddBook /> : <NotFound />} />
-      <Route path="/edit/:id" element={user ? <EditBook /> : <NotFound />} />
-      <Route path="/view/:id" element={user ? <ViewBook /> : <NotFound />} />
+
+      {/* ADMIN SCREEN */}
+      <Route path="/admin" element={<ListBooks />} />
+      <Route path="/admin/add" element={<AddBook />} />
+      <Route path="/admin/edit/:id" element={<EditBook />} />
+      <Route path="/admin/view/:id" element={<ViewBook />} />
+
       <Route path="/*" element={<NotFound />} />
     </Routes>
   );

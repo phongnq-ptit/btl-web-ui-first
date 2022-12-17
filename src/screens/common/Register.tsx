@@ -14,8 +14,8 @@ import React, { useState } from "react";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link, useNavigate } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
-import { errorNotify, successNotify } from "../Notification";
-import useAuthApi from "../hooks/useAuthApi";
+import { errorNotify, successNotify } from "../../Notification";
+import useAuthApi from "../../hooks/useAuthApi";
 
 const Register = () => {
   const { handleSubmit, control } = useForm();

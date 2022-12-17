@@ -36,7 +36,7 @@ const Header = () => {
   const handleLogout = () => {
     localStorage.clear();
     setAnchorEl(null);
-    window.location.href = "/";
+    window.location.href = "/login";
   };
 
   return (

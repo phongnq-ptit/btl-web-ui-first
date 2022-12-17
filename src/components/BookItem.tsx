@@ -69,7 +69,7 @@ const BookItem = ({ book, index }: { book: Book; index: number }) => {
           <Grid item xs={2}>
             <Link
               style={{ color: "white", textDecoration: "none" }}
-              to={`/view/${book.id}`}
+              to={`/admin/view/${book.id}`}
             >
               <Button
                 sx={{ mr: 1, backgroundColor: "darkgreen" }}

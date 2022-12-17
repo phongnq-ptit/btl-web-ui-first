@@ -6,7 +6,8 @@ export interface ApiResponse<T> {
 export interface User {
     email: string, 
     password?:string,
-    name: string
+    name: string,
+    role?: string
 }
 
 export interface Category {
@@ -27,6 +28,7 @@ export interface Book {
     author: string,
     date: string,
     page: number,
+    price: number,
     description: string,
     categoryId?: number,
     category: Category,

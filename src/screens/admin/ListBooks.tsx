@@ -1,9 +1,9 @@
 import { Box, Button, CssBaseline, Grid, Typography } from "@mui/material";
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { BookContext } from "../BookContext";
-import BookItem from "../components/BookItem";
-import { User } from "../interface";
+import { BookContext } from "../../BookContext";
+import BookItem from "../../components/BookItem";
+import { User } from "../../interface";
 
 const ListBooks = () => {
   const user: User = JSON.parse(localStorage.getItem("login")!);
@@ -25,7 +25,7 @@ const ListBooks = () => {
         <Grid container justifyContent="flex-end">
           <Grid item xs={2}>
             <Link
-              to="/add"
+              to="/admin/add"
               style={{ color: "darkblue", textDecoration: "none" }}
             >
               <Button variant="outlined" size="large">

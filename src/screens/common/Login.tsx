@@ -14,8 +14,8 @@ import React, { useState } from "react";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
-import { errorNotify, successNotify } from "../Notification";
 import axios from "axios";
+import { errorNotify, successNotify } from "../../Notification";
 
 const Login = () => {
   const { handleSubmit, control } = useForm();

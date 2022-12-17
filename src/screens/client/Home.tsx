@@ -1,21 +1,84 @@
-import { Box, Grid } from "@mui/material";
-import React, { useContext } from "react";
-import { BookContext } from "../../BookContext";
-import BookCard from "../../components/BookCard";
+import { Box, Tab, Tabs } from "@mui/material";
+import CategoryIcon from "@mui/icons-material/Category";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import React from "react";
+import ListCard from "../../components/ListCard";
 
-const Home = () => {
-  const { books } = useContext(BookContext);
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
 
   return (
-    <Box sx={{ width: "85%", margin: "0 auto", pt: 12 }}>
-      <Box sx={{ width: "100%", typography: "body1" }}></Box>
-      <Grid container spacing={3}>
-        {books.map((book) => (
-          <Grid item xs={3}>
-            <BookCard key={book.id} props={{ bookInfo: book }} />
-          </Grid>
-        ))}
-      </Grid>
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
+
+const Home = () => {
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
+  return (
+    <Box sx={{ width: "85%", margin: "0 auto", pt: 10 }}>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="basic tabs example"
+          centered
+        >
+          <Tab
+            icon={<CategoryIcon />}
+            iconPosition="start"
+            label="Sản Phẩm"
+            {...a11yProps(0)}
+          />
+          <Tab
+            label="Giỏ Hàng"
+            icon={<ShoppingCartIcon />}
+            iconPosition="start"
+            {...a11yProps(1)}
+          />
+          <Tab
+            label="Đơn Hàng"
+            icon={<ReceiptLongIcon />}
+            iconPosition="start"
+            {...a11yProps(2)}
+          />
+        </Tabs>
+      </Box>
+      <TabPanel value={value} index={0}>
+        <ListCard />
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        Item Two
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        Item Three
+      </TabPanel>
     </Box>
   );
 };

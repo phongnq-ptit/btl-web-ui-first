@@ -5,6 +5,7 @@ import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import React, { useContext } from "react";
 import ListCard from "../../components/ListCard";
 import { CartContext } from "../../context/CartContext";
+import Cart from "./Cart";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -81,7 +82,7 @@ const Home = () => {
         <ListCard />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        Item Two
+        <Cart />
       </TabPanel>
       <TabPanel value={value} index={2}>
         Item Three

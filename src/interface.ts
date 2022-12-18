@@ -40,5 +40,5 @@ export interface Cart {
     id: number,
     quantity: number,
     user: User,
-    book: Book[]
+    books: Book
 }

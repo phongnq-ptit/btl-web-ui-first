@@ -11,3 +11,9 @@ export const errorNotify = (message : string) => {
         position: toast.POSITION.TOP_RIGHT
     });
 }
+
+export const warningNotify = (message : string) => {
+    toast.warning(message, {
+        position: toast.POSITION.TOP_RIGHT
+    });
+}

@@ -33,7 +33,9 @@ const CartItem = ({ props }: { props: Props }) => {
       case "increment":
         setQuantity(quantity + 1);
         updateCart(props.cartItem.id, quantity + 1, 1)
-          .then((response) => {})
+          .then((response) => {
+            setIsReload(!isReload);
+          })
           .catch((err) => errorNotify(err.message));
         break;
       case "decrement":
@@ -42,7 +44,9 @@ const CartItem = ({ props }: { props: Props }) => {
         } else {
           setQuantity(quantity - 1);
           updateCart(props.cartItem.id, quantity - 1, 1)
-            .then((response) => {})
+            .then((response) => {
+              setIsReload(!isReload);
+            })
             .catch((err) => errorNotify(err.message));
         }
         break;

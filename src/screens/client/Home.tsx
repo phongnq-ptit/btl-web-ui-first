@@ -1,9 +1,10 @@
-import { Box, Tab, Tabs } from "@mui/material";
+import { Badge, Box, Tab, Tabs } from "@mui/material";
 import CategoryIcon from "@mui/icons-material/Category";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
-import React from "react";
+import React, { useContext } from "react";
 import ListCard from "../../components/ListCard";
+import { CartContext } from "../../context/CartContext";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -41,6 +42,8 @@ const Home = () => {
     setValue(newValue);
   };
 
+  const { myCart } = useContext(CartContext);
+
   return (
     <Box sx={{ width: "85%", margin: "0 auto", pt: 10 }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -58,7 +61,11 @@ const Home = () => {
           />
           <Tab
             label="Giỏ Hàng"
-            icon={<ShoppingCartIcon />}
+            icon={
+              <Badge badgeContent={myCart.length} color="info" showZero>
+                <ShoppingCartIcon />
+              </Badge>
+            }
             iconPosition="start"
             {...a11yProps(1)}
           />

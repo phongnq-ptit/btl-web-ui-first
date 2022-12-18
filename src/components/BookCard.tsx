@@ -11,6 +11,7 @@ import PaidIcon from "@mui/icons-material/Paid";
 import React from "react";
 import { Book } from "../interface";
 import { Box } from "@mui/system";
+import { Link } from "react-router-dom";
 
 interface BookCardProps {
   bookInfo: Book;
@@ -36,7 +37,11 @@ const BookCard = ({ props }: { props: BookCardProps }) => {
         height="200"
         alt=""
         src={props.bookInfo.image?.url}
-        sx={{ objectFit: "scale-down" }}
+        sx={{
+          objectFit: "scale-down",
+          p: 1,
+          backgroundColor: "#c5dcff",
+        }}
       />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
@@ -44,7 +49,16 @@ const BookCard = ({ props }: { props: BookCardProps }) => {
             className="d-inline-block text-truncate"
             style={{ maxWidth: "300px" }}
           >
-            {props.bookInfo.title}
+            <Link
+              to={`/book/${props.bookInfo.id}`}
+              style={{
+                color: "darkgreen",
+                textDecoration: "none",
+                fontWeight: 700,
+              }}
+            >
+              {props.bookInfo.title}
+            </Link>
           </span>
         </Typography>
         <Typography variant="body2" color="text.secondary">

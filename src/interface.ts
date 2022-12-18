@@ -4,6 +4,7 @@ export interface ApiResponse<T> {
 }
 
 export interface User {
+    id: number,
     email: string, 
     password?:string,
     name: string,
@@ -39,5 +40,5 @@ export interface Cart {
     id: number,
     quantity: number,
     user: User,
-    book: Book
+    book: Book[]
 }

@@ -10,17 +10,20 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Link } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import axios from "axios";
 import { errorNotify, successNotify } from "../../Notification";
+import { CartContext } from "../../context/CartContext";
 
 const Login = () => {
   const { handleSubmit, control } = useForm();
   const [err, setErr] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+
+  const { isReload, setIsReload } = useContext(CartContext);
 
   const handleLogin = async (data: any) => {
     await axios
@@ -33,6 +36,7 @@ const Login = () => {
           setLoading(true);
           setTimeout(() => {
             setLoading(false);
+            setIsReload(!isReload); // update cart
             window.location.href =
               response.data.data.role === "CLIENT" ? "/" : "/admin";
           }, 3000);

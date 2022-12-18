@@ -8,8 +8,8 @@ const ListCard = () => {
   return (
     <Grid container spacing={3}>
       {books.map((book) => (
-        <Grid item xs={3}>
-          <BookCard key={book.id} props={{ bookInfo: book }} />
+        <Grid item xs={3} key={book.id}>
+          <BookCard props={{ bookInfo: book }} />
         </Grid>
       ))}
     </Grid>

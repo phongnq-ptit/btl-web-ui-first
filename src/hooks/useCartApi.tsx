@@ -1,4 +1,3 @@
-import React from "react";
 import { ApiResponse, Cart } from "../interface";
 import useApi from "./useApi";
 
@@ -15,8 +14,10 @@ const useCartApi = () => {
     return POST<ApiResponse<Cart>>(baseUrl, { userId, bookId, quantity });
   }
 
-  async function getCartByUser(userId: number): Promise<ApiResponse<Cart>> {
-    return GET<ApiResponse<Cart>>(baseUrl, { userId: userId });
+  async function getCartByUser(
+    userId: number
+  ): Promise<ApiResponse<Array<Cart>>> {
+    return GET<ApiResponse<Array<Cart>>>(baseUrl, { userId: userId });
   }
 
   async function updateCart(

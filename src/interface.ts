@@ -34,3 +34,10 @@ export interface Book {
     category: Category,
     image: Img | null
 }
+
+export interface Cart {
+    id: number,
+    quantity: number,
+    user: User,
+    book: Book
+}

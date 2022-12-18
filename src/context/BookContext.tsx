@@ -1,6 +1,6 @@
 import { createContext, ReactNode } from "react";
-import BookApi from "./apis/BookApi";
-import { Book } from "./interface";
+import BookApi from "../apis/BookApi";
+import { Book } from "../interface";
 
 interface IBookContextType {
   books: Book[];

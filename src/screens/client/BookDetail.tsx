@@ -3,10 +3,11 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import InfoIcon from "@mui/icons-material/Info";
 import StarRateIcon from "@mui/icons-material/StarRate";
 import React, { useEffect, useState } from "react";
-import { Book } from "../../interface";
+import { Book, User } from "../../interface";
 import { Link, useParams } from "react-router-dom";
 import useBookApi from "../../hooks/useBookApi";
-import { errorNotify } from "../../Notification";
+import { errorNotify, warningNotify } from "../../Notification";
+import AddCartDialog from "../../components/AddCartDialog";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -38,10 +39,20 @@ function a11yProps(index: number) {
 }
 
 const BookDetail = () => {
+  const user: User = JSON.parse(localStorage.getItem("login")!);
   const [value, setValue] = React.useState(0);
+  const [open, setOpen] = React.useState<boolean>(false);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
+  };
+
+  const handleOpenDialog = () => {
+    if (user === null) {
+      warningNotify("Bạn cần đăng nhập để sử dụng tính năng này!");
+    } else {
+      setOpen(true);
+    }
   };
 
   const formatter = new Intl.NumberFormat("it-IT", {
@@ -132,68 +143,81 @@ const BookDetail = () => {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <Grid container spacing={2}>
-              <Grid item xs={3}>
-                <Grid
-                  container
-                  spacing={2}
-                  direction="column"
-                  sx={{ color: "darkgreen", fontWeight: 500 }}
-                >
-                  <Grid item xs={1}>
-                    Tên Sách:
-                  </Grid>
-                  <Grid item xs={1}>
-                    Tác Giả:
-                  </Grid>
-                  <Grid item xs={1}>
-                    Ngày Xuất Bản:
-                  </Grid>
-                  <Grid item xs={1}>
-                    Số Trang:
-                  </Grid>
-                  <Grid item xs={1}>
-                    Thể Loại:
-                  </Grid>
-                  <Grid item xs={1}>
-                    Giá Tiền:
-                  </Grid>
-                  <Grid item xs={6}>
-                    Mô Tả:
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item xs={9}>
-                <Grid container spacing={2} direction="column">
-                  <Grid item xs={1}>
-                    {bookInfo?.title}
-                  </Grid>
-                  <Grid item xs={1}>
-                    {bookInfo?.author}
-                  </Grid>
-                  <Grid item xs={1}>
-                    {bookInfo?.date}
-                  </Grid>
-                  <Grid item xs={1}>
-                    {bookInfo?.page}
-                  </Grid>
-                  <Grid item xs={1}>
-                    {bookInfo?.category.label}
-                  </Grid>
-                  <Grid item xs={1}>
-                    {formatter.format(bookInfo?.price!)}
-                  </Grid>
-                  <Grid item xs={6}>
-                    {bookInfo?.description}
+            <React.Fragment>
+              <Grid container spacing={2}>
+                <Grid item xs={3}>
+                  <Grid
+                    container
+                    spacing={2}
+                    direction="column"
+                    sx={{ color: "darkgreen", fontWeight: 500 }}
+                  >
+                    <Grid item xs={1}>
+                      Tên Sách:
+                    </Grid>
+                    <Grid item xs={1}>
+                      Tác Giả:
+                    </Grid>
+                    <Grid item xs={1}>
+                      Ngày Xuất Bản:
+                    </Grid>
+                    <Grid item xs={1}>
+                      Số Trang:
+                    </Grid>
+                    <Grid item xs={1}>
+                      Thể Loại:
+                    </Grid>
+                    <Grid item xs={1}>
+                      Giá Tiền:
+                    </Grid>
+                    <Grid item xs={6}>
+                      Mô Tả:
+                    </Grid>
                   </Grid>
                 </Grid>
+                <Grid item xs={9}>
+                  <Grid container spacing={2} direction="column">
+                    <Grid item xs={1}>
+                      {bookInfo?.title}
+                    </Grid>
+                    <Grid item xs={1}>
+                      {bookInfo?.author}
+                    </Grid>
+                    <Grid item xs={1}>
+                      {bookInfo?.date}
+                    </Grid>
+                    <Grid item xs={1}>
+                      {bookInfo?.page}
+                    </Grid>
+                    <Grid item xs={1}>
+                      {bookInfo?.category.label}
+                    </Grid>
+                    <Grid item xs={1}>
+                      {formatter.format(bookInfo?.price!)}
+                    </Grid>
+                    <Grid item xs={6}>
+                      {bookInfo?.description}
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    variant="contained"
+                    sx={{ fontWeight: 700, mt: 3 }}
+                    onClick={handleOpenDialog}
+                  >
+                    Thêm Vào Giỏ Hàng
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid item xs={12}>
-                <Button variant="contained" sx={{ fontWeight: 700, mt: 3 }}>
-                  Thêm Vào Giỏ Hàng
-                </Button>
-              </Grid>
-            </Grid>
+              <AddCartDialog
+                props={{
+                  open: open,
+                  setOpen: setOpen,
+                  bookInfo: bookInfo ? bookInfo : ({} as Book),
+                }}
+              />
+            </React.Fragment>
           </TabPanel>
           <TabPanel value={value} index={1}>
             Item Two

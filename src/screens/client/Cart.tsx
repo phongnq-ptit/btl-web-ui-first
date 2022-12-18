@@ -30,9 +30,10 @@ const Cart = () => {
               <Grid item xs={3}>
                 Số Lượng
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={2}>
                 Thành Tiền
               </Grid>
+              <Grid item xs={1}></Grid>
             </Grid>
           </ListItem>
           {myCart.map((item) => (

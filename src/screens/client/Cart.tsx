@@ -12,11 +12,14 @@ import React, { useContext } from "react";
 import { Controller, useForm } from "react-hook-form";
 import CartItem from "../../components/CartItem";
 import { CartContext } from "../../context/CartContext";
-import { User } from "../../interface";
+import useBillApi from "../../hooks/useBillApi";
+import { BillStatus, User } from "../../interface";
+import { errorNotify, successNotify } from "../../Notification";
 
 const Cart = () => {
   const user: User = JSON.parse(localStorage.getItem("login")!);
-  const { myCart } = useContext(CartContext);
+  const { myCart, isReload, setIsReload } = useContext(CartContext);
+  const { createBill } = useBillApi();
   const { handleSubmit, control } = useForm();
 
   const formatter = new Intl.NumberFormat("it-IT", {
@@ -25,7 +28,33 @@ const Cart = () => {
     minimumFractionDigits: 0,
   });
 
-  const save = (data: any) => {};
+  const save = (data: any) => {
+    const cartIds = myCart.map((item) => {
+      return item.id;
+    });
+
+    const date = new Date().toLocaleString("it-IT", {
+      timeZone: "Asia/Ho_Chi_Minh",
+    });
+
+    createBill({
+      date: date,
+      status: BillStatus.PENDING,
+      userId: user.id,
+      listBooks: { carts: cartIds },
+      userInfo: { ...data },
+    })
+      .then((response) => {
+        if (response.data !== null) {
+          successNotify(response.message);
+          setIsReload(!isReload);
+        } else {
+          errorNotify(response.message);
+        }
+      })
+      .catch((e) => errorNotify(e.message))
+      .finally(() => {});
+  };
 
   return (
     <Grid container spacing={2}>
@@ -80,6 +109,7 @@ const Cart = () => {
                   }) => (
                     <TextField
                       required
+                      type="email"
                       margin="normal"
                       label="Email"
                       variant="outlined"
@@ -129,7 +159,7 @@ const Cart = () => {
                       required
                       margin="normal"
                       label="Số điện thoại"
-                      type="tel"
+                      type="number"
                       variant="outlined"
                       value={value}
                       onChange={onChange}

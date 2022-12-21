@@ -42,3 +42,25 @@ export interface Cart {
     user: User,
     books: Book
 }
+
+export interface Bill {
+    id: number,
+    date: string,
+    status: string,
+    userId: number,
+    listBooks?: string,
+    userInfo?: string,
+    listProducts: Array<Cart>,
+    info: {
+        name: string,
+        tel: string,
+        email: string,
+        address: string
+    }
+}
+
+export enum BillStatus {
+    PENDING = 'PENDING',
+    COMPLETED = 'COMPLETED',
+    CANCEL = 'CANCEL'
+}

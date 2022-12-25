@@ -10,6 +10,7 @@ import EditBook from "./screens/admin/EditBook";
 import Login from "./screens/common/Login";
 import Home from "./screens/client/Home";
 import BookDetail from "./screens/client/BookDetail";
+import BillDetail from "./screens/common/BillDetail";
 
 const Page = () => {
   const user: User = JSON.parse(localStorage.getItem("login")!);
@@ -22,6 +23,7 @@ const Page = () => {
       {/* CLIENT SCREEN */}
       <Route path="/" element={<Home />} />
       <Route path="/book/:id" element={<BookDetail />} />
+      <Route path="/bill/:id" element={<BillDetail />} />
 
       {/* ADMIN SCREEN */}
       <Route

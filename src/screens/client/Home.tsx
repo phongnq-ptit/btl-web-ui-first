@@ -6,6 +6,7 @@ import React, { useContext } from "react";
 import ListCard from "../../components/ListCard";
 import { CartContext } from "../../context/CartContext";
 import Cart from "./Cart";
+import ListBill from "./ListBill";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -85,7 +86,7 @@ const Home = () => {
         <Cart />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        Item Three
+        <ListBill />
       </TabPanel>
     </Box>
   );

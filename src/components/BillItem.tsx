@@ -50,7 +50,7 @@ const BillItem = ({ props }: { props: Props }) => {
             label={props.billItem.status}
             size="small"
             color={colorChip()}
-            variant="outlined"
+            variant="filled"
           />
         </Box>
       </Grid>

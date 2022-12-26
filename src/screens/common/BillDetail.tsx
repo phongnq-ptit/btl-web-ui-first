@@ -10,7 +10,7 @@ import {
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Bill, BillStatus, User } from "../../interface";
+import { Bill, BillStatus } from "../../interface";
 import useBillApi from "../../hooks/useBillApi";
 import { errorNotify, successNotify } from "../../Notification";
 import BillBookItem from "../../components/BillBookItem";
@@ -18,7 +18,6 @@ import StyledDialog from "../../components/StyledDialog";
 
 const BillDetail = () => {
   const params = useParams();
-  const user: User = JSON.parse(localStorage.getItem("login")!);
   const formatter = new Intl.NumberFormat("it-IT", {
     style: "currency",
     currency: "VND",
@@ -130,7 +129,7 @@ const BillDetail = () => {
                     label={bill?.status}
                     size="small"
                     color={colorChip()}
-                    variant="outlined"
+                    variant="filled"
                   />
                 </Box>
               </Grid>

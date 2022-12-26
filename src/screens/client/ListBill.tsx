@@ -25,7 +25,7 @@ const ListBill = () => {
         .catch((e) => errorNotify(e.message));
     }
     // eslint-disable-next-line
-  }, [user, loadBill]);
+  }, [loadBill]);
 
   return (
     <Grid container spacing={2} width={"70%"} ml={35}>

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import useCommentApi from "../hooks/useCommentApi";
 import { Book, Comment } from "../interface";
 import { errorNotify } from "../Notification";
+import CommentDialog from "./CommentDialog";
 import CommentItem from "./CommentItem";
 
 const useStyles = makeStyles({
@@ -32,6 +33,8 @@ const CommentDiv = ({ props }: { props: Props }) => {
 
   const [comments, setComments] = useState<Array<Comment>>([]);
   const [loadComment, setLoadComment] = useState<boolean>(false);
+
+  const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
     getAllCommentOfBook(props.book.id)
@@ -81,11 +84,24 @@ const CommentDiv = ({ props }: { props: Props }) => {
           alignItems="center"
           borderTop="1px solid #ccc"
         >
-          <Button variant="outlined" sx={{ width: "200px" }}>
+          <Button
+            variant="outlined"
+            sx={{ width: "200px" }}
+            onClick={() => setOpen(true)}
+          >
             Đánh giá sách
           </Button>
         </Box>
       </Box>
+      <CommentDialog
+        props={{
+          bookId: props.book.id,
+          open: open,
+          setOpen: setOpen,
+          loadComment: loadComment,
+          setLoadComment: setLoadComment,
+        }}
+      />
     </React.Fragment>
   );
 };

@@ -59,6 +59,15 @@ export interface Bill {
     }
 }
 
+export interface Comment {
+    id?: number,
+    rate: number,
+    comment: string,
+    date: string,
+    user: User,
+    book: Book
+}
+
 export enum BillStatus {
     PENDING = 'PENDING',
     COMPLETED = 'COMPLETED',

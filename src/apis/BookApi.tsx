@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useBookApi from "../hooks/useBookApi";
 import { Book } from "../interface";
 
@@ -17,6 +17,7 @@ const BookApi = () => {
     };
 
     getBooks();
+    // eslint-disable-next-line
   }, [isReload]);
 
   return { books, setBooks, isReload, setIsReload };

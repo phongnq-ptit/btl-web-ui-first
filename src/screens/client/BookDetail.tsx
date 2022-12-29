@@ -8,6 +8,7 @@ import { Link, useParams } from "react-router-dom";
 import useBookApi from "../../hooks/useBookApi";
 import { errorNotify, warningNotify } from "../../Notification";
 import AddCartDialog from "../../components/AddCartDialog";
+import CommentDiv from "../../components/CommentDiv";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -220,7 +221,7 @@ const BookDetail = () => {
             </React.Fragment>
           </TabPanel>
           <TabPanel value={value} index={1}>
-            Item Two
+            <CommentDiv props={{ book: bookInfo! }} />
           </TabPanel>
         </Grid>
       </Grid>

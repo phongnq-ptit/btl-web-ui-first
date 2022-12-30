@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Alert, Grid } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import BillItem from "../../components/BillItem";
 import useBillApi from "../../hooks/useBillApi";
@@ -28,28 +28,34 @@ const ListBill = () => {
   }, [loadBill]);
 
   return (
-    <Grid container spacing={2} width={"70%"} ml={35}>
-      {bills.map((item) => (
-        <Grid
-          key={item.id}
-          item
-          xs={12}
-          sx={{
-            mt: 2,
-            p: 2,
-            borderBottom: "1px solid #ccc",
-          }}
-        >
-          <BillItem
-            props={{
-              billItem: item,
-              loadBill: loadBill,
-              setLoadBill: setLoadBill,
-            }}
-          />
+    <React.Fragment>
+      {user === null || bills.length === 0 ? (
+        <Alert severity="info">Thông tin đơn hàng rỗng!</Alert>
+      ) : (
+        <Grid container spacing={2} width={"70%"} ml={35}>
+          {bills.map((item) => (
+            <Grid
+              key={item.id}
+              item
+              xs={12}
+              sx={{
+                mt: 2,
+                p: 2,
+                borderBottom: "1px solid #ccc",
+              }}
+            >
+              <BillItem
+                props={{
+                  billItem: item,
+                  loadBill: loadBill,
+                  setLoadBill: setLoadBill,
+                }}
+              />
+            </Grid>
+          ))}
         </Grid>
-      ))}
-    </Grid>
+      )}
+    </React.Fragment>
   );
 };
 

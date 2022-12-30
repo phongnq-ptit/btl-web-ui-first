@@ -8,9 +8,9 @@ import {
   Typography,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Bill, BillStatus } from "../../interface";
+import { Bill, BillStatus, User } from "../../interface";
 import useBillApi from "../../hooks/useBillApi";
 import { errorNotify, successNotify } from "../../Notification";
 import BillBookItem from "../../components/BillBookItem";
@@ -18,6 +18,7 @@ import StyledDialog from "../../components/StyledDialog";
 
 const BillDetail = () => {
   const params = useParams();
+  const user: User = JSON.parse(localStorage.getItem("login")!);
   const formatter = new Intl.NumberFormat("it-IT", {
     style: "currency",
     currency: "VND",
@@ -30,6 +31,7 @@ const BillDetail = () => {
   const [totalBill, setTotalBill] = useState<number>(0);
   const [reload, setReload] = useState<boolean>(false);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const clickOk = useRef<BillStatus>();
 
   const handleUpdateStatus = (status: BillStatus) => {
     updateBillStatus(bill?.id!, status)
@@ -83,7 +85,7 @@ const BillDetail = () => {
   return (
     <React.Fragment>
       <Box sx={{ width: "85%", margin: "0 auto", pt: 12 }}>
-        <Link to="/">
+        <Link to={user.role === "CLIENT" ? "/" : "/admin"}>
           <Button>
             <ArrowBackIcon sx={{ fontSize: "40px", fontWeight: 700 }} />
           </Button>
@@ -134,6 +136,10 @@ const BillDetail = () => {
                 </Box>
               </Grid>
             </Grid>
+            <ListSubheader>Thời gian đặt đơn hàng:</ListSubheader>
+            <Typography variant="h5" color="darkgreen" mb={1}>
+              {bill?.date}
+            </Typography>
             <ListSubheader>Thông tin sản phẩm đã mua:</ListSubheader>
             <React.Fragment>
               {bill?.listProducts.map((item) => (
@@ -145,9 +151,25 @@ const BillDetail = () => {
                 <Button
                   variant="outlined"
                   color={colorChip()}
-                  onClick={() => setOpenDialog(true)}
+                  onClick={() => {
+                    clickOk.current = BillStatus.CANCEL;
+                    setOpenDialog(true);
+                  }}
                 >
                   Hủy đơn hàng
+                </Button>
+              )}
+              {bill?.status === BillStatus.PENDING && user.role === "ADMIN" && (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  sx={{ ml: 2 }}
+                  onClick={() => {
+                    clickOk.current = BillStatus.COMPLETED;
+                    setOpenDialog(true);
+                  }}
+                >
+                  Xác nhận đơn hàng
                 </Button>
               )}
             </Box>
@@ -160,7 +182,12 @@ const BillDetail = () => {
           setOpen: setOpenDialog,
           title: "Hãy xác nhận",
           content: "Bạn có muốn thay đổi trạng thái đơn hàng?",
-          handleClickOk: () => handleUpdateStatus(BillStatus.CANCEL),
+          handleClickOk: () =>
+            handleUpdateStatus(
+              clickOk.current === BillStatus.CANCEL
+                ? BillStatus.CANCEL
+                : BillStatus.COMPLETED
+            ),
         }}
       />
     </React.Fragment>

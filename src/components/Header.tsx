@@ -39,6 +39,16 @@ const Header = () => {
     window.location.href = "/login";
   };
 
+  const showTextLogo = () => {
+    if (user === null) {
+      return "B19DCPT176";
+    } else if (user.role === "ADMIN") {
+      return "ADMIN";
+    } else {
+      return "CLIENT";
+    }
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar component="nav">
@@ -64,7 +74,7 @@ const Header = () => {
                 fontWeight: "700",
               }}
             >
-              B19DCPT176
+              {showTextLogo()}
             </Link>
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>

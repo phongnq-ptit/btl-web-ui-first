@@ -24,7 +24,7 @@ const useBillApi = () => {
   }
 
   async function getAllBillUser(
-    userId: number
+    userId: number | null
   ): Promise<ApiResponse<Array<Bill>>> {
     return GET<ApiResponse<Array<Bill>>>(baseUrl, { userId: userId });
   }

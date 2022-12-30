@@ -14,7 +14,7 @@ const ListBill = () => {
 
   useEffect(() => {
     if (user) {
-      getAllBillUser(user.id)
+      getAllBillUser(user.role === "CLIENT" ? user.id : null)
         .then((response) => {
           if (response.data !== null) {
             setBills(response.data);
